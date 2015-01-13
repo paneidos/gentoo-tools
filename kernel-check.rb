@@ -177,7 +177,6 @@ class Package
     }
     contents = File.read(ebuild_path)
     if contents.index("CONFIG_CHECK")
-      puts self.to_s
       results = contents.scan(/^\s+(local\s+)?CONFIG_CHECK\+?="(?<config>[^"]+)"/)
       config_options = results.flatten.map{|s| s.split(/\s+/)}.flatten.reject{|s| s == "" || s == "${CONFIG_CHECK}" || s == "$CONFIG_CHECK" }.compact
       all_options[package_without_flags] = config_options.dup
@@ -357,7 +356,6 @@ if ARGV.size == 0
 else
   # Collect info from emerge output
   emerge_command = ["emerge", "--pretend", "--verbose"] + options.emerge_opts + ARGV
-  emerge_command = ["cat world-output.txt"]
   result = `#{emerge_command.join(" ")}`.split("\n")
   result.each do |line|
     if package = Package.parse_emerge_line(line)
