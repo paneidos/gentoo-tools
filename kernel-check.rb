@@ -178,7 +178,7 @@ class Package
     contents = File.read(ebuild_path)
     if contents.index("CONFIG_CHECK")
       puts self.to_s
-      results = contents.scan(/^\s+(local\s+)?CONFIG_CHECK="(?<config>[^"]+)"/)
+      results = contents.scan(/^\s+(local\s+)?CONFIG_CHECK\+?="(?<config>[^"]+)"/)
       config_options = results.flatten.map{|s| s.split(/\s+/)}.flatten.reject{|s| s == "" || s == "${CONFIG_CHECK}" || s == "$CONFIG_CHECK" }.compact
       all_options[package_without_flags] = config_options.dup
 
