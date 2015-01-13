@@ -1,0 +1,25 @@
+#!/sbin/runscript
+# Copyright 2013 Sernin van de Krol
+
+GOD=${GOD:-god}
+RUBY=${RUBY:-ruby}
+PORT=${PORT:-17165}
+GOD_CONF=${GOD_CONF:-/etc/god/master.conf}
+LOG=${LOG:-/var/log/god.log}
+PIDFILE=${PIDFILE:-/run/god.pid}
+
+depend() {
+	need localmount
+}
+
+start() {
+	ebegin "Starting god:${RC_SVCNAME#*.}"
+	start-stop-daemon -p $PIDFILE -- $RUBY $GOD -c $GOD_CONF --pid $PIDFILE --log $LOG -p $PORT
+	eend $?
+}
+
+stop() {
+	ebegin "Stopping god:${RC_SVCNAME#*.}"
+	start-stop-daemon -p $PIDFILE --stop --retry=TERM/45/KILL/15
+	eend $?
+}
