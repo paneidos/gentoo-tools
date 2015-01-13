@@ -348,7 +348,7 @@ if ARGV.size == 0
     result = `bzcat #{environment} | grep "declare -- CONFIG_CHECK"`.chop
     if result.size > 0 && match = result.match(/\Adeclare -- CONFIG_CHECK="([^"]+)"\z/)
       package = Package.parse_atom(File.dirname(environment))
-      config_options = match[1].split(/\s+/)
+      config_options = match[1].split(/\s+/).reject{ |s| s == "" }
       config_checker.add_package_options(package, config_options)
     end
   end
